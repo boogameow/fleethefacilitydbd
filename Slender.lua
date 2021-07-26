@@ -11,7 +11,7 @@ local pl = ps.LocalPlayer
 local info
 local version = 2.1
 
-local volume = 2.5
+local volume = 2
 local distance = 1000000
 
 local state = {
