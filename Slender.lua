@@ -79,7 +79,7 @@ local first = Instance.new("TextLabel", gui)
     first.TextSize = 35
     first.Text = "Slender v" .. tostring(version)
     first.TextColor3 = Color3.fromRGB(255, 255, 255)
-    first.Position = UDim2.new(0.01, 0, 0.2, 0)
+    first.Position = UDim2.new(0.01, 0, 0.18, 0)
     first.AnchorPoint = Vector2.new(0, 0.5)
     first.Size = UDim2.new(0.15, 0, 0.05, 0)
 
