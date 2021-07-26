@@ -9,7 +9,7 @@ local pl = ps.LocalPlayer
 -- manipulated variables
 
 local info
-local version = 1.1
+local version = 2
 
 local volume = 2.5
 local distance = 1000000
@@ -54,7 +54,6 @@ local function newconnection(player)
             if child.Name == "CitizenGui" and state.spoof == true then 
                 local static = child:WaitForChild("Static")
                 static:WaitForChild("SeeingCheck").Disabled = true
-                static:WaitForChild("ProxySeeingCheck").Disabled = true
             end
         end)
     end
@@ -106,7 +105,6 @@ info = {
             if citizen then
                 local static = citizen.Static
                 static.SeeingCheck.Disabled = newstate
-                static.ProxySeeingCheck.Disabled = newstate
                 static.looking.Value = false
             end
 
