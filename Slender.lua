@@ -9,7 +9,7 @@ local pl = ps.LocalPlayer
 -- manipulated variables
 
 local info
-local version = 2
+local version = 2.1
 
 local volume = 2.5
 local distance = 1000000
@@ -79,7 +79,7 @@ local first = Instance.new("TextLabel", gui)
     first.TextSize = 35
     first.Text = "Slender v" .. tostring(version)
     first.TextColor3 = Color3.fromRGB(255, 255, 255)
-    first.Position = UDim2.new(0.01, 0, 0.4, 0)
+    first.Position = UDim2.new(0.01, 0, 0.2, 0)
     first.AnchorPoint = Vector2.new(0, 0.5)
     first.Size = UDim2.new(0.15, 0, 0.05, 0)
 
