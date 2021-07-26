@@ -9,7 +9,7 @@ local pl = ps.LocalPlayer
 -- manipulated variables
 
 local info
-local version = 1
+local version = 2
 
 local volume = 2.5
 local distance = 1000000
