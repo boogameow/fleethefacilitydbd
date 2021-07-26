@@ -8,9 +8,11 @@ local pl = ps.LocalPlayer
 
 -- manipulated variables
 
+local info
+local version = 1
+
 local volume = 2.5
 local distance = 1000000
-local info
 
 local state = {
     spoof = false
@@ -76,7 +78,7 @@ local first = Instance.new("TextLabel", gui)
     first.TextXAlignment = Enum.TextXAlignment.Left
     first.Font = Enum.Font.SourceSansBold
     first.TextSize = 35
-    first.Text = "Stop It Slender"
+    first.Text = "Slender v" .. tostring(version)
     first.TextColor3 = Color3.fromRGB(255, 255, 255)
     first.Position = UDim2.new(0.01, 0, 0.4, 0)
     first.AnchorPoint = Vector2.new(0, 0.5)
