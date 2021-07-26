@@ -42,13 +42,13 @@ local function newconnection(pl)
         charsetup(pl.Character)
     end
 
-    pl.PlayerGui.ChildAdded:Connect(function(child)
+   --[[ pl.PlayerGui.ChildAdded:Connect(function(child)
         if child.Name == "CitizenGui" and state.spoof == true then 
             local static = child:WaitForChild("Static")
             static:WaitForChild("SeeingCheck").Disabled = true
             static:WaitForChild("ProxySeeingCheck").Disabled = true
         end
-    end)
+    end)]]--
 end
 
 -- events
