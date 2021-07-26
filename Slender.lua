@@ -16,6 +16,11 @@ local state = {
     spoof = false
 }
 
+local color = {
+    [true] = Color3.fromRGB(0, 255, 0),
+    [false] = Color3.fromRGB(255, 0, 0)
+}
+
 -- functions
 
 local function charsetup(char)
@@ -35,28 +40,30 @@ local function charsetup(char)
     end)
 end
 
-local function newconnection(pl)
-    pl.CharacterAdded:Connect(charsetup)
+local function newconnection(player)
+    player.CharacterAdded:Connect(charsetup)
 
-    if pl.Character then
-        charsetup(pl.Character)
+    if player.Character then
+        charsetup(player.Character)
     end
 
-   --[[ pl.PlayerGui.ChildAdded:Connect(function(child)
-        if child.Name == "CitizenGui" and state.spoof == true then 
-            local static = child:WaitForChild("Static")
-            static:WaitForChild("SeeingCheck").Disabled = true
-            static:WaitForChild("ProxySeeingCheck").Disabled = true
-        end
-    end)]]--
+    if player.UserId == pl.UserId then 
+        pl.PlayerGui.ChildAdded:Connect(function(child)
+            if child.Name == "CitizenGui" and state.spoof == true then 
+                local static = child:WaitForChild("Static")
+                static:WaitForChild("SeeingCheck").Disabled = true
+                static:WaitForChild("ProxySeeingCheck").Disabled = true
+            end
+        end)
+    end
 end
 
 -- events
 
 ps.PlayerAdded:Connect(newconnection)
 
-for _, pl in pairs(ps:GetChildren()) do
-    newconnection(pl)
+for _, player in pairs(ps:GetChildren()) do
+    newconnection(player)
 end
 
 -- interface creation
@@ -88,24 +95,21 @@ info = {
     },
     [Enum.KeyCode.V] = {
         Name = "Look Spoofer",
-        ColorState = {
-            [true] = Color3.fromRGB(0, 255, 0),
-            [false] = Color3.fromRGB(255, 0, 0)
-        },
+        BoolType = true,
         Action = function(key)
             local self = info[key]
             local newstate = not state.spoof
-            local citizen = plgui:FindFirstChild("CitizenGui")
+            local citizen = pl.PlayerGui:FindFirstChild("CitizenGui")
             
             if citizen then
                 local static = citizen.Static
-                static.SeeingCheck.Enabled = newstate
-                static.ProxySeeingCheck.Enabled = newstate
+                static.SeeingCheck.Disabled = newstate
+                static.ProxySeeingCheck.Disabled = newstate
                 static.looking.Value = false
             end
 
             state.spoof = newstate
-            self.Object.TextColor3 = self.ColorState[newstate]
+            self.Object.TextColor3 = color[newstate]
         end
     },
 }
@@ -113,7 +117,6 @@ info = {
 -- loop create
 
 for i, key in pairs(info) do
-    local self = info[i]
     local letter = string.split(tostring(i), ".")[3]
 
     scale += 0.025
@@ -125,14 +128,14 @@ for i, key in pairs(info) do
     text.Text = letter .. " - " .. key.Name
     text.Position = UDim2.new(0.02, 0, scale, 0)
 
-    if self.ColorState then 
-        text.TextColor3 = self.ColorState[self.State]
+    if key.BoolType == true then
+        text.TextColor3 = color[false]
     else 
         text.TextColor3 = Color3.fromRGB(235, 238, 9)
     end
     
     text.Parent = gui
-    self.Object = text
+    key.Object = text
 end
 
 -- handle input
