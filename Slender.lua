@@ -5,7 +5,6 @@ local inputservice = game:GetService("UserInputService")
 
 local ps = game:GetService("Players")
 local pl = ps.LocalPlayer
-local plgui = pl.PlayerGui
 
 -- manipulated variables
 
@@ -43,7 +42,7 @@ local function newconnection(pl)
         charsetup(pl.Character)
     end
 
-    plgui.ChildAdded:Connect(function(child)
+    pl.PlayerGui.ChildAdded:Connect(function(child)
         if child.Name == "CitizenGui" and state.spoof == true then 
             local static = child:WaitForChild("Static")
             static:WaitForChild("SeeingCheck").Disabled = true
