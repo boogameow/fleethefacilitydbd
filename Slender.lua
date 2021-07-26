@@ -46,7 +46,7 @@ local function newconnection(player)
     player.CharacterAdded:Connect(charsetup)
 
     if player.Character then
-        charsetup(player.Character)
+        coroutine.wrap(charsetup)(player.Character)
     end
 
     if player.UserId == pl.UserId then 
@@ -95,7 +95,7 @@ info = {
             gui.Enabled = not gui.Enabled
         end
     },
-    [Enum.KeyCode.V] = {
+    [Enum.KeyCode.B] = {
         Name = "Look Spoofer",
         BoolType = true,
         Action = function(key)
