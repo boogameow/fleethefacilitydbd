@@ -1,6 +1,7 @@
 -- services
 
 local cam = workspace.CurrentCamera
+local sgui = game:GetService("StarterGui")
 local inputservice = game:GetService("UserInputService")
 local lighting = game:GetService("Lighting")
 local ps = game:GetService("Players")
@@ -42,34 +43,38 @@ end
 
 -- main functions
 
-local function destroy(tp)
+local function stop(tp)
 	if phasing == true then
+		phasing = false
+		
 		sound:Stop()
 		sound.Parent = nil
 		cor.Parent = nil
+		
 		setgui(false)
+		sgui:SetCore("ResetButtonCallback", true)
 		
 		if tp == true then
 			char.HumanoidRootPart.CFrame = clone.HumanoidRootPart.CFrame
 		end
 		
-		clone.Parent = nil
 		pl.Character = char
 		cam.CameraSubject = char
+		clone.Parent = nil
 		
 		setgui(true)
 		setop(char, 0)
-		
-		phasing = false
 	end
 end
 
-local function create()
+local function start()
 	if clone ~= nil and char ~= nil and phasing == false and char.Humanoid.Health > 0 then
 		cor.Parent = lighting
 		sound.Parent = workspace
 		sound:Play()
+		
 		setgui(false)
+		sgui:SetCore("ResetButtonCallback", false)
 		
 		clone.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame + (char.HumanoidRootPart.CFrame.LookVector * -3)
 		clone.Parent = workspace
@@ -88,25 +93,30 @@ end
 
 -- character setup & cloning
 
-local function setupchar(detchar)
-	if clone then
-		clone:Destroy()
-		clone = nil
+local function charspawn(newchar)
+	if newchar ~= clone and newchar ~= char then
+		if phasing == true then
+			sound:Stop()
+			sound.Parent = nil
+			cor.Parent = nil
+			phasing = false
+		end
+
+		char = nil
+		
+		if clone then
+			clone:Destroy()
+			clone = nil
+		end
 	end
+end
 
-	if phasing == true then
-		sound:Stop()
-		sound.Parent = nil
-		cor.Parent = nil
-		phasing = false
-	end
-
-	char = pl.Character
-	char.Archivable = true
-	clone = char:Clone()
-
+local function charload(newchar)
+	newchar.Archivable = true
+	clone = newchar:Clone()
 	clone:WaitForChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-	char.Humanoid.Died:Connect(destroy)
+	newchar.Humanoid.Died:Connect(stop)
+	char = newchar
 end
 
 -- input handling
@@ -114,19 +124,24 @@ end
 inputservice.InputBegan:Connect(function(input, proc)
 	if proc then return elseif input.KeyCode == Enum.KeyCode.F1 then
 		if phasing == false then
-			create() -- F1 to start phase
+			start() -- F1 to start phase
 		else
-			destroy() -- F1 to end phase (return back to character)
+			stop() -- F1 to end phase (return back to character)
 		end
 	elseif input.KeyCode == Enum.KeyCode.F2 and phasing == true then
-		destroy(true) -- F2 to end phase (teleport character to phaser)
+		stop(true) -- F2 to end phase (teleport character to phaser)
 	end
 end)
 
 -- hooking events
 
-pl.CharacterAppearanceLoaded:Connect(setupchar)
+pl.CharacterAdded:Connect(charspawn)
+pl.CharacterAppearanceLoaded:Connect(charload)
 
-if pl.Character and pl:HasAppearanceLoaded() == true then
-	setupchar()
+if pl.Character then
+	charspawn(pl.Character)
+	
+	if pl:HasAppearanceLoaded() == true then
+		charload(pl.Character)
+	end
 end
