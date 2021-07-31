@@ -9,7 +9,7 @@ local pl = ps.LocalPlayer
 
 -- vars
 
-local clone, char = nil
+local clone, char
 local phasing = false
 
 -- instances
@@ -59,7 +59,7 @@ local function stop(tp)
 		end
 		
 		pl.Character = char
-		cam.CameraSubject = char
+		cam.CameraSubject = char.Humanoid
 		clone.Parent = nil
 		
 		setgui(true)
@@ -102,12 +102,8 @@ local function charspawn(newchar)
 			phasing = false
 		end
 
-		char = nil
-		
-		if clone then
-			clone:Destroy()
-			clone = nil
-		end
+		char = newchar
+		newchar:WaitForChild("Humanoid").Died:Connect(stop)
 	end
 end
 
@@ -115,8 +111,12 @@ local function charload(newchar)
 	newchar.Archivable = true
 	clone = newchar:Clone()
 	clone:WaitForChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-	newchar.Humanoid.Died:Connect(stop)
-	char = newchar
+
+	local ff = clone:FindFirstChildOfClass("ForceField")
+
+	if ff then
+		ff:Destroy()
+	end
 end
 
 -- input handling
@@ -136,12 +136,14 @@ end)
 -- hooking events
 
 pl.CharacterAdded:Connect(charspawn)
-pl.CharacterAppearanceLoaded:Connect(charload)
 
 if pl.Character then
 	charspawn(pl.Character)
-	
+
 	if pl:HasAppearanceLoaded() == true then
+		charload(pl.Character)
+	else
+		pl.CharacterAppearanceLoaded:Wait()
 		charload(pl.Character)
 	end
 end
