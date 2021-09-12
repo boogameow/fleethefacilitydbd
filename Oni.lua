@@ -249,12 +249,12 @@ local function activatePower(_, st)
 		ts:Create(grad, TweenInfo.new(furylength, Enum.EasingStyle.Linear), {Offset = Vector2.new(0, 0)}):Play()
 		ts:Create(activesound, TweenInfo.new(2, Enum.EasingStyle.Linear), {Volume = 0.9}):Play()
 
-		delay(furylength - 1, function()
+		task.delay(furylength - 1, function()
 			ts:Create(activesound, TweenInfo.new(1, Enum.EasingStyle.Linear), {Volume = 0}):Play()
 			ts:Create(label, TweenInfo.new(1, Enum.EasingStyle.Linear), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
 			ts:Create(cor, TweenInfo.new(1, Enum.EasingStyle.Linear), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
-			delay(1, function()
+			task.delay(1, function()
 				activesound:Stop()
 				endsound:Play()
 				powercharges = 0
@@ -289,7 +289,7 @@ local function setupPlayer(pl)
 		local hs = pl.Backpack:WaitForChild("Scripts"):WaitForChild("values"):WaitForChild("HealthState")
 		local char2 = pl.Character or pl.CharacterAdded:Wait()
 
-		while wait(orbdroptime) do
+		while task.wait(orbdroptime) do
 			if not char2 or not hs or not char2:FindFirstChild("HumanoidRootPart") or not char2:FindFirstChild("Humanoid") or char2.Humanoid.Health <= 0 then
 				break
 			elseif hs.Value == 1 and bloodmode == true then
@@ -312,13 +312,13 @@ run.RenderStepped:Connect(function()
 				coroutine.wrap(function()
 					for i = 0, 1, .01 do
 						v.CFrame = v.CFrame:Lerp(char.HumanoidRootPart.CFrame, i)
-						wait(orbgrabtime / 100)
+						task.wait(orbgrabtime / 100)
 					end
 				end)()
 
 				ts:Create(v, TweenInfo.new(orbgrabtime, Enum.EasingStyle.Linear), {Transparency = 1}):Play()
 
-				delay(orbgrabtime, function()
+				task.delay(orbgrabtime, function()
 					v:Destroy()
 
 					if powerfull == false then
