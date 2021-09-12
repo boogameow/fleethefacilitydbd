@@ -59,7 +59,7 @@ local function sp()
 
     upd:FireServer(sbp, true)
 
-    delay(3, function() 
+    task.delay(3, function() 
         upd:FireServer(sbp, false) 
     end)
 end
@@ -200,7 +200,7 @@ local codes = {
             end 
         end
 
-        delay(1.25, function()
+        task.delay(1.25, function()
             c.HumanoidRootPart.CFrame = workspace.Hatch.HumanoidRootPart.CFrame
         end)
     end, "Open hatch."};
